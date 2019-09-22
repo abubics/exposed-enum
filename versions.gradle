@@ -1,0 +1,11 @@
+ext.versions = [
+  platform: [
+    kotlin: '1.3.30'
+  ],
+  app: [
+    exposed: '0.16.2',
+    ktor: '1.1.4',
+    liquibase: '3.6.1',
+    postgres: '42.2.5',
+  ]
+]

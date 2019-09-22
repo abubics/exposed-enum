@@ -1,0 +1,57 @@
+buildscript {
+  repositories {
+    jcenter()
+    maven { url 'https://plugins.gradle.org/m2/' }
+    mavenCentral()
+  }
+
+  apply from: 'versions.gradle'
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.platform.kotlin}"
+  }
+}
+
+plugins {
+  id 'org.jetbrains.kotlin.jvm' version '1.3.50'
+  id 'org.liquibase.gradle' version '2.0.1'
+}
+apply plugin: 'application'
+
+group 'exposed-enum'
+version '0.0.1-SNAPSHOT'
+
+mainClassName = 'io.ktor.server.jetty.EngineMain'
+
+sourceSets {
+  main.resources.srcDirs = ['src/main/res']
+}
+
+repositories {
+  mavenLocal()
+  jcenter()
+  maven { url 'https://kotlin.bintray.com/ktor' }
+}
+
+def env(varName, fallback = null) {
+  System.env[varName] ?: project.findProperty(varName) ?: fallback
+}
+
+apply from: 'dependencies.gradle'
+
+def db = [
+  url: "jdbc:postgresql://${env('DB_HOST', 'localhost:5432')}/${env('POSTGRES_DB', 'exposed-enum-db')}",
+  user: env('DB_USERNAME', 'postgres'),
+  pass: env('DB_PASSWORD', 'password'),
+]
+
+liquibase {
+  activities {
+    main {
+      changeLogFile "$projectDir/migration/main.xml"
+      url db.url
+      username db.user
+      password db.pass
+      logLevel 'debug'
+    }
+  }
+}

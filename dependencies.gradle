@@ -1,0 +1,12 @@
+apply from: 'versions.gradle'
+
+dependencies {
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.platform.kotlin}"
+  implementation "io.ktor:ktor-server-jetty:${versions.app.ktor}"
+  implementation "io.ktor:ktor-server-core:${versions.app.ktor}"
+  implementation "org.jetbrains.exposed:exposed:${versions.app.exposed}"
+  implementation "org.postgresql:postgresql:${versions.app.postgres}"
+
+  liquibaseRuntime "org.liquibase:liquibase-core:${versions.app.liquibase}"
+  liquibaseRuntime "org.postgresql:postgresql:${versions.app.postgres}"
+}
